@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CS235 Podcast Library</title>
+    <link rel="stylesheet" href="../static/css/main.css">
+</head>
+<body>
+
+{% include 'sidebar.html' %}
+
+<div class="main">
+    <div class="title">
+        <h1>CS235 Podcast Library</h1>
+        <h4>atel215 | gsan089 | fmeh174</h4>
+        <hr>
+    </div>
+    <div class="podcast-container">
+        <div class="podcast-image">
+            <img src="{{ podcast.image }}" alt="{{ podcast.title }}">
+        </div>
+
+        <div class="podcast-details">
+            <h1>{{ podcast.title }}</h1>
+            <p><strong>Author:</strong> {{ podcast.author.name }}</p>
+            <p><strong>Description:</strong> {{ podcast.description }}</p>
+            <p><strong>Categories:</strong> {{ podcast.categories }} </p>
+            <p><strong>Language:</strong> {{ podcast.language }}</p>
+            <p><strong>Website:</strong> <a href="{{ podcast.website }}">{{ podcast.website }}</a></p>
+            <p><strong>Itunes ID:</strong> {{ podcast.itunes_id }} </p>
+        </div>
+    </div>
+
+    <div class="episodes-container">
+        <h2>Episodes</h2>
+        <div class="episode-list">
+        {% for episode in episodes %}
+                <div class="episode-card" style="background-image: url('{{ podcast.image }}');">
+                    <div class="episode-content">
+                        <h3>{{ episode["title"] }}</h3>
+                        <audio controls>
+                            <source src="{{ episode['audio'] }}" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+            {% else %}
+                <p>No episodes yet :(</p>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('podcasts_bp.podcast_detail', id=podcast['id'], page=page-1) }}">&lt;&nbsp;</a>
+            {% endif %}
+            <span> Page {{ page }} of {{ total_pages }} </span>
+            {% if page < total_pages %}
+                <a href="{{ url_for('podcasts_bp.podcast_detail', id=podcast['id'], page=page+1) }}">&nbsp;&gt;</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+

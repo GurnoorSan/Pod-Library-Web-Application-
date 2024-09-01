@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <main id="main">
+        <header id="podcast-header">
+            <h1>{{ podcasts_title }}</h1>
+        </header>
+
+        <div id="cardP">
+            <div class="wrapper">
+                <div class="boxP-area">
+                    {% for podcast in podcasts %}
+                        <div class="boxP" style="background-image: url('{{ podcast['image'] }}');">
+                            <div class="overlay-catalog">
+                                <h3>{{ podcast['title'] }}</h3>
+                                <a href="{{ url_for('podcasts_bp.podcast_detail', id=podcast['id']) }}">Listen Now</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% if total_pages > 1 %}
+            <nav aria-label="Page navigation" class="pagination-container">
+                <ul class="pagination">
+                    {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('podcasts_bp.browse_podcast', page=page-1) }}" aria-label="Previous">
+                                &laquo;
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% set start_page = max(page - 4, 1) %}
+                    {% set end_page = min(page + 4, total_pages) %}
+
+                    {% if start_page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('podcasts_bp.browse_podcast', page=1) }}">1</a>
+                        </li>
+                        {% if start_page > 2 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for p in range(start_page, end_page + 1) %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('podcasts_bp.browse_podcast', page=p) }}">{{ p }}</a>
+                        </li>
+                    {% endfor %}
+
+                    {% if end_page < total_pages %}
+                        {% if end_page < total_pages - 1 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('podcasts_bp.browse_podcast', page=total_pages) }}">{{ total_pages }}</a>
+                        </li>
+                    {% endif %}
+
+                    {% if page < total_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('podcasts_bp.browse_podcast', page=page+1) }}" aria-label="Next">
+                                &raquo;
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </main>
+{% endblock %}
